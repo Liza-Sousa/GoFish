@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,94 +8,72 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="399dp"
-        android:layout_height="29dp">
+    <LinearLayout
+        android:id="@+id/opponentLayout"
+        android:layout_width="397dp"
+        android:layout_height="38dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/cardWanted"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerLayout">
 
         <TextView
-            android:id="@+id/textView9"
-            android:layout_width="0dp"
+            android:id="@+id/opponentPairLabel"
+            android:layout_width="119dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:text="Opponent's Pairs"
-            android:textSize="20sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/opponentPair"
-            app:layout_constraintEnd_toStartOf="@+id/opponentPair"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_weight="1"
+            android:text="Opponent Pairs"
+            android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/opponentPair"
-            android:layout_width="0dp"
+            android:id="@+id/opponentPairs"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="0"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView9"
-            tools:layout_editor_absoluteY="0dp" />
-    </android.support.constraint.ConstraintLayout>
+            android:textSize="20sp" />
+    </LinearLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="399dp"
-        android:layout_height="29dp">
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:text="Opponent's Pairs"
-            android:textSize="20sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/opponentPair"
-            app:layout_constraintEnd_toStartOf="@+id/opponentPair"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/opponentPair"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView9" />
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/linearLayout2"
+    <LinearLayout
+        android:id="@+id/cardRemaining"
         android:layout_width="400dp"
-        android:layout_height="26dp">
+        android:layout_height="29dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/playerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
+            android:id="@+id/cardLabel"
+            android:layout_width="119dp"
             android:layout_height="wrap_content"
-            android:text="Your Pairs"
-            android:textSize="20sp"
-            tools:layout_conversion_absoluteHeight="26dp"
-            tools:layout_conversion_absoluteWidth="248dp"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="37dp" />
+            android:layout_weight="1"
+            android:text="Cards Remaining"
+            android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/userPair"
+            android:id="@+id/cardsLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="20sp"
-            tools:layout_conversion_absoluteHeight="26dp"
-            tools:layout_conversion_absoluteWidth="152dp"
-            tools:layout_editor_absoluteX="256dp"
-            tools:layout_editor_absoluteY="37dp" />
-    </android.support.constraint.ConstraintLayout>
+            android:layout_weight="1"
+            android:text="42"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/row1"
         android:layout_width="395dp"
         android:layout_height="150dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/row2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardWanted">
 
         <ImageButton
             android:id="@+id/card1"
@@ -137,7 +115,12 @@
         android:id="@+id/row2"
         android:layout_width="395dp"
         android:layout_height="150dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/row1">
 
         <ImageButton
             android:id="@+id/card6"
@@ -175,31 +158,43 @@
             tools:srcCompat="@tools:sample/avatars" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="400dp"
-        android:layout_height="29dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/cardLabel"
-            android:layout_width="119dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cards Remaining"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/cardsLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="42"
-            android:textSize="20sp" />
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/cardWanted"
         android:layout_width="114dp"
-        android:layout_height="162dp" />
+        android:layout_height="162dp"
+        app:layout_constraintBottom_toTopOf="@+id/row1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/opponentLayout"
+        app:srcCompat="@android:drawable/screen_background_dark_transparent" />
 
-</GridLayout>
+    <LinearLayout
+        android:id="@+id/playerLayout"
+        android:layout_width="397dp"
+        android:layout_height="38dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/opponentLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardRemaining">
+
+        <TextView
+            android:id="@+id/playerPairLabel"
+            android:layout_width="119dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Your Pairs"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/playerPairs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="0"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
