@@ -13,7 +13,7 @@
         android:layout_width="397dp"
         android:layout_height="38dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/cardWanted"
+        app:layout_constraintBottom_toTopOf="@+id/decorationCards"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardWanted">
+        app:layout_constraintTop_toBottomOf="@+id/decorationCards">
 
         <ImageButton
             android:id="@+id/card1"
@@ -187,18 +187,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="178dp"
-        android:layout_height="191dp"
-        app:layout_constraintBottom_toTopOf="@+id/row1"
-        app:layout_constraintEnd_toStartOf="@+id/cardWanted"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/cardWanted"
-        app:layout_constraintTop_toBottomOf="@+id/opponentLayout"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <ImageView
-        android:id="@+id/cardWanted"
+        android:id="@+id/decorationCards"
         android:layout_width="395dp"
         android:layout_height="162dp"
         app:layout_constraintBottom_toTopOf="@+id/row1"
@@ -206,6 +195,17 @@
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/opponentLayout"
-        app:srcCompat="@android:drawable/screen_background_dark_transparent" />
+        app:srcCompat="@drawable/backofcards" />
+
+    <ImageView
+        android:id="@+id/cardWanted"
+        android:layout_width="178dp"
+        android:layout_height="191dp"
+        app:layout_constraintBottom_toTopOf="@+id/row1"
+        app:layout_constraintEnd_toStartOf="@+id/decorationCards"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/decorationCards"
+        app:layout_constraintTop_toBottomOf="@+id/opponentLayout"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 </android.support.constraint.ConstraintLayout>
