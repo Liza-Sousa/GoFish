@@ -1,6 +1,8 @@
 package com.example.gofish;
 
 import android.content.res.AssetManager;
+import android.view.View.OnClickListener;
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,9 +26,6 @@ public class MainActivity extends AppCompatActivity {
     int[] opponentHand = new int[10];
     ImageButton card[] = new ImageButton[10];
 
-    int playerPair = 0;
-    int opponentPair = 0;
-    int cardsRemaining = 42;
 
 
     @Override
@@ -45,9 +44,33 @@ public class MainActivity extends AppCompatActivity {
         card[7] = findViewById(R.id.card8);
         card[8] = findViewById(R.id.card9);
         card[9] = findViewById(R.id.card10);
-
+        for (int i = 0; i<10; i++) {
+            setOnClick(card[i], i);
+        }
         shuffleDeck();
         dealCards();
+    }
+
+    private void setOnClick(final ImageButton btn, final int id){
+        btn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AssetManager assets = getAssets();
+                for(int i = 0; i<10; i++) {
+                    if(opponentHand[i] > 0 && opponentHand[i] % 13 == id) {
+                        // found a pair
+                        try (InputStream stream =
+                                     assets.open( "cards/" + "empty" + ".png")) {
+                            // load the asset as a Drawable and display on the flagImageView
+                            Drawable currentCard = Drawable.createFromStream(stream, "empty");
+                            card[i].setImageDrawable(currentCard);
+                        } catch (IOException exception) {
+                            Log.e("","Error loading " + "empty", exception);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -72,14 +95,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void shuffleDeck() {
+    public void shuffleDeck(){
         Random rgen = new Random();  // Random number generator
-        //initialize deck from 1-52
-        for (int j = 0; j < cardArray.length; j++) {
-            cardArray[j] = j + 1;
+     //initialize deck from 1-52
+        for(int j = 0; j < cardArray.length; j++) {
+            cardArray[j] = j +1;
         }
         //randomize order of cards
-        for (int i = 0; i < cardArray.length; i++) {
+        for (int i=0; i<cardArray.length; i++) {
             int randomPosition = rgen.nextInt(cardArray.length);
             int temp = cardArray[i];
             cardArray[i] = cardArray[randomPosition];
@@ -132,51 +155,10 @@ public class MainActivity extends AppCompatActivity {
                 Drawable currentCard = Drawable.createFromStream(stream, "empty");
                 card[i].setImageDrawable(currentCard);
             } catch (IOException exception) {
-                Log.e("", "Error loading " + "empty", exception);
+                Log.e("","Error loading " + "empty", exception);
             }
         }
 
-
-    }
-
-    public void goFish(int[] array) {
-        Random rgen = new Random();
-
-        if (cardsRemaining == 0) {
-            if (playerPair > opponentPair) {
-                //print out You Win!
-            } else {
-                //print out you lose :(
-            }
-        } else {
-            for (int j = 0; j < array.length; j++) {
-                if (array[j] == -1) {
-                    while(array[j] == -1) {
-                        array[j] = cardArray[rgen.nextInt(cardArray.length)];
-                    }
-                    cardsRemaining--;
-
-                    // use AssetManager to load next image from assets folder
-                    AssetManager assets = getAssets();
-                    String cards = "cards";
-                    String nextCard = "";
-
-                    nextCard = Integer.toString(array[j]);
-                    // get an InputStream to the asset representing the next flag
-                    // and try to use the InputStream
-                    try (InputStream stream =
-                                 assets.open(cards + "/" + nextCard + ".png")) {
-                        // load the asset as a Drawable and display on the flagImageView
-                        Drawable currentCard = Drawable.createFromStream(stream, nextCard);
-                        card[i].setImageDrawable(currentCard);
-                    } catch (IOException exception) {
-                        Log.e("", "Error loading " + nextCard, exception);
-                    }
-                    j = array.length;
-
-                }
-
-            }
-        }
     }
 }
+
