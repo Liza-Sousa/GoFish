@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // use AssetManager to load next image from assets folder
-        AssetManager assets = getActivity().getAssets();
+        AssetManager assets = getAssets();
         String cards = "cards";
         String nextCard = "";
         for (int i = 0; i < 5; i++) {
