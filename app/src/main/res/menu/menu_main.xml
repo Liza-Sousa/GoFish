@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.gofish.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/switchGame"
         android:orderInCategory="100"
         android:title="Switch Game"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/restartGame"
+        android:orderInCategory="100"
+        android:title="Restart Game"
         app:showAsAction="never" />
 </menu>
