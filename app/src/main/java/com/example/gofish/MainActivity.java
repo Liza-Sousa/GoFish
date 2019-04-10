@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         }
         shuffleDeck();
         dealCards();
+        goFish(playerHand, 1);
     }
 
     private void setOnClick(final ImageButton btn, final int id){
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 opponentHand[k] = cardArray[i];
                 k++;
             }
+            cardArray[i] = -1;
         }
         //set bottom row of cards to be -1 so they're invalid
         for (int i = 5; i < 10; i++) {
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void goFish(int[] array) {
+    public void goFish(int[] array, int player) {
         Random rgen = new Random();
 
         if (cardsRemaining == 0) {
@@ -180,24 +182,28 @@ public class MainActivity extends AppCompatActivity {
                         array[j] = cardArray[rgen.nextInt(cardArray.length)];
                     }
                     cardsRemaining--;
+                    cardArray[j] = -1;
 
-                    // use AssetManager to load next image from assets folder
-                    AssetManager assets = getAssets();
-                    String cards = "cards";
-                    String nextCard = "";
+                    if(player==1) {
 
-                    nextCard = Integer.toString(array[j]);
-                    // get an InputStream to the asset representing the next flag
-                    // and try to use the InputStream
-                    try (InputStream stream =
-                                 assets.open(cards + "/" + nextCard + ".png")) {
-                        // load the asset as a Drawable and display on the flagImageView
-                        Drawable currentCard = Drawable.createFromStream(stream, nextCard);
-                        card[i].setImageDrawable(currentCard);
-                    } catch (IOException exception) {
-                        Log.e("", "Error loading " + nextCard, exception);
+                        // use AssetManager to load next image from assets folder
+                        AssetManager assets = getAssets();
+                        String cards = "cards";
+                        String nextCard = "";
+
+                        nextCard = Integer.toString(array[j]);
+                        // get an InputStream to the asset representing the next flag
+                        // and try to use the InputStream
+                        try (InputStream stream =
+                                     assets.open(cards + "/" + nextCard + ".png")) {
+                            // load the asset as a Drawable and display on the flagImageView
+                            Drawable currentCard = Drawable.createFromStream(stream, nextCard);
+                            card[j].setImageDrawable(currentCard);
+                        } catch (IOException exception) {
+                            Log.e("", "Error loading " + nextCard, exception);
+                        }
+                        j = array.length;
                     }
-                    j = array.length;
 
                 }
 
