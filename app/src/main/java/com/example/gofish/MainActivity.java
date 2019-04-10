@@ -26,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
     int[] opponentHand = new int[10];
     ImageButton card[] = new ImageButton[10];
 
-
+    int playerPair = 0;
+    int opponentPair = 0;
+    int cardsRemaining = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException exception) {
                             Log.e("","Error loading " + "empty", exception);
                         }
+
                     }
                 }
             }
@@ -159,6 +162,47 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void goFish(int[] array) {
+        Random rgen = new Random();
+
+        if (cardsRemaining == 0) {
+            if (playerPair > opponentPair) {
+                //print out You Win!
+            } else {
+                //print out you lose :(
+            }
+        } else {
+            for (int j = 0; j < array.length; j++) {
+                if (array[j] == -1) {
+                    while (array[j] == -1) {
+                        array[j] = cardArray[rgen.nextInt(cardArray.length)];
+                    }
+                    cardsRemaining--;
+
+                    // use AssetManager to load next image from assets folder
+                    AssetManager assets = getAssets();
+                    String cards = "cards";
+                    String nextCard = "";
+
+                    nextCard = Integer.toString(array[j]);
+                    // get an InputStream to the asset representing the next flag
+                    // and try to use the InputStream
+                    try (InputStream stream =
+                                 assets.open(cards + "/" + nextCard + ".png")) {
+                        // load the asset as a Drawable and display on the flagImageView
+                        Drawable currentCard = Drawable.createFromStream(stream, nextCard);
+                        card[i].setImageDrawable(currentCard);
+                    } catch (IOException exception) {
+                        Log.e("", "Error loading " + nextCard, exception);
+                    }
+                    j = array.length;
+
+                }
+
+            }
+        }
     }
 }
 
