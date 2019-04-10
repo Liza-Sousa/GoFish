@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     int[] cardArray = new int[52];
     int[] playerHand = new int[10];
     int[] opponentHand = new int[10];
-
+    ImageButton card[] = new ImageButton[10];
     ImageButton card1;
     ImageButton card2;
     ImageButton card3;
@@ -41,6 +41,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        card[0] = findViewById(R.id.card1);
+        card[1] = findViewById(R.id.card2);
+        card[2] = findViewById(R.id.card3);
+        card[3] = findViewById(R.id.card4);
+        card[4] = findViewById(R.id.card5);
+        card[5] = findViewById(R.id.card6);
+        card[6] = findViewById(R.id.card7);
+        card[7] = findViewById(R.id.card8);
+        card[8] = findViewById(R.id.card9);
+        card[9] = findViewById(R.id.card10);
+
         shuffleDeck();
         dealCards();
     }
@@ -70,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
     public void shuffleDeck(){
         Random rgen = new Random();  // Random number generator
      //initialize deck from 1-52
-        for(int j = 1; j <= cardArray.length; j++) {
-            cardArray[j] = j;
+        for(int j = 0; j < cardArray.length; j++) {
+            cardArray[j] = j +1;
         }
         //randomize order of cards
         for (int i=0; i<cardArray.length; i++) {
@@ -80,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             cardArray[i] = cardArray[randomPosition];
             cardArray[randomPosition] = temp;
         }
-        return;
     }
 
     public void dealCards() {
@@ -102,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
             opponentHand[i] = -1;
         }
 
-
         // use AssetManager to load next image from assets folder
         AssetManager assets = getAssets();
         String cards = "cards";
@@ -115,10 +124,23 @@ public class MainActivity extends AppCompatActivity {
                          assets.open(cards + "/" + nextCard + ".png")) {
                 // load the asset as a Drawable and display on the flagImageView
                 Drawable currentCard = Drawable.createFromStream(stream, nextCard);
-                card1.setImageDrawable(currentCard);
+                card[i].setImageDrawable(currentCard);
             } catch (IOException exception) {
-                //Log.e(TAG, "Error loading " + nextCard, exception);
+                Log.e("", "Error loading " + nextCard, exception);
             }
         }
+        for (int i = 5; i < 10; i++) {
+            // get an InputStream to the asset representing the next flag
+            // and try to use the InputStream
+            try (InputStream stream =
+                         assets.open(cards + "/" + "empty" + ".png")) {
+                // load the asset as a Drawable and display on the flagImageView
+                Drawable currentCard = Drawable.createFromStream(stream, "empty");
+                card[i].setImageDrawable(currentCard);
+            } catch (IOException exception) {
+                Log.e("","Error loading " + "empty", exception);
+            }
+        }
+
     }
 }
