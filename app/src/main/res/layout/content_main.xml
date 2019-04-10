@@ -67,7 +67,7 @@
     <LinearLayout
         android:id="@+id/row1"
         android:layout_width="395dp"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/row2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,43 +78,53 @@
         <ImageButton
             android:id="@+id/card1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageButton
             android:id="@+id/card2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageButton
             android:id="@+id/card3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageButton
             android:id="@+id/card4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageButton
             android:id="@+id/card5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/row2"
         android:layout_width="395dp"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -125,36 +135,46 @@
         <ImageButton
             android:id="@+id/card6"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageButton
             android:id="@+id/card7"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageButton
             android:id="@+id/card8"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageButton
             android:id="@+id/card9"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageButton
             android:id="@+id/card10"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
             tools:srcCompat="@tools:sample/avatars" />
     </LinearLayout>
 
