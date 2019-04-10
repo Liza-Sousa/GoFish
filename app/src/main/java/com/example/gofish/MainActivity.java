@@ -5,6 +5,7 @@ import android.view.View.OnClickListener;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
     int[] cardArray = new int[52];
     int[] playerHand = new int[10];
     int[] opponentHand = new int[10];
+    TextView playerPairTextView;
     ImageButton card[] = new ImageButton[10];
+    private Handler handler; // used to delay
 
     int playerPair = 0;
     int opponentPair = 0;
@@ -36,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        playerPairTextView = findViewById(R.id.playerPairs) ;
+
         card[0] = findViewById(R.id.card1);
         card[1] = findViewById(R.id.card2);
         card[2] = findViewById(R.id.card3);
@@ -58,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                int getPair = 0;
                 AssetManager assets = getAssets();
                 for(int i = 0; i<10; i++) {
                     if(opponentHand[i] > 0 && opponentHand[i] % 13 == id) {
@@ -70,12 +78,35 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException exception) {
                             Log.e("","Error loading " + "empty", exception);
                         }
+                        // load the next flag after a 2-second delay
+                        Toast.makeText(getApplicationContext(), "You got a pair", Toast.LENGTH_SHORT).show();
+                        playerPair++;
+                        playerPairTextView.setText(""+Integer.toString(playerPair));
+                        getPair = 1;
+                        handler.postDelayed(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                    }
+                                }, 2000); // 2000 milliseconds for 2-second delay
 
                     }
+                }
+                if(getPair == 0) {
+                    Toast.makeText(getApplicationContext(), "You did not get a match", Toast.LENGTH_SHORT).show();
+                    handler.postDelayed(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                }
+                            }, 2000); // 2000 milliseconds for 2-second delay
+
                 }
             }
         });
     }
+
+    private void onO
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
