@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     int[] playerHand = new int[10];
     int[] opponentHand = new int[10];
     TextView playerPairTextView;
+    TextView cardsRemainingTextView;
     ImageButton card[] = new ImageButton[10];
     ImageView cardWanted;
     private Handler handler; // used to delay
@@ -43,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         playerPairTextView = findViewById(R.id.playerPairs) ;
+        cardsRemainingTextView = findViewById(R.id.cardsLeft);
 
+        handler = new Handler();
         card[0] = findViewById(R.id.card1);
         card[1] = findViewById(R.id.card2);
         card[2] = findViewById(R.id.card3);
@@ -71,18 +74,19 @@ public class MainActivity extends AppCompatActivity {
                 int getPair = 0;
                 AssetManager assets = getAssets();
                 for(int i = 0; i<10; i++) {
-                    if(opponentHand[i] > 0 && opponentHand[i] % 13 == id) {
+                    if(opponentHand[i] > 0 && opponentHand[i] % 13 == playerHand[id]) {
                         // found a pair
+                        Toast.makeText(getApplicationContext(), "You got a pair", Toast.LENGTH_SHORT).show();
                         try (InputStream stream =
                                      assets.open( "cards/" + "empty" + ".png")) {
                             // load the asset as a Drawable and display on the flagImageView
                             Drawable currentCard = Drawable.createFromStream(stream, "empty");
-                            card[i].setImageDrawable(currentCard);
+                            card[id].setImageDrawable(currentCard);
+                            playerHand[id] = -1;
                         } catch (IOException exception) {
                             Log.e("","Error loading " + "empty", exception);
                         }
                         // load the next flag after a 2-second delay
-                        Toast.makeText(getApplicationContext(), "You got a pair", Toast.LENGTH_SHORT).show();
                         playerPair++;
                         playerPairTextView.setText(""+Integer.toString(playerPair));
                         getPair = 1;
@@ -97,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(getPair == 0) {
                     Toast.makeText(getApplicationContext(), "You did not get a match", Toast.LENGTH_SHORT).show();
+                    goFish(playerHand, 1);
                     handler.postDelayed(
                             new Runnable() {
                                 @Override
@@ -196,7 +201,37 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("","Error loading " + "empty", exception);
             }
         }
+        checkPlayerInitialMatch(playerHand);
 
+
+
+    }
+    public void checkPlayerInitialMatch(int[] array){
+        		for(int i = 0; i < array.length - 1; i++){
+                    for(int j = i+1; j<array.length; j++){
+                        if (array[i]%13 == array[j]%13 && array[i]!=-1 && array[j]!=-1){
+                            playerPair++;
+                            playerPairTextView.setText(""+Integer.toString(playerPair));
+
+                            AssetManager assets = getAssets();
+                            String cards = "cards";
+                            String nextCard = "";
+                            try (InputStream stream =
+                                         assets.open(cards + "/" + "empty" + ".png")) {
+                                // load the asset as a Drawable and display on the flagImageView
+                                Drawable currentCard = Drawable.createFromStream(stream, "empty");
+                                card[i].setImageDrawable(currentCard);
+                                card[j].setImageDrawable(currentCard);
+                            } catch (IOException exception) {
+                                Log.e("","Error loading " + "empty", exception);
+                            }
+                            playerHand[j] = -1;
+                            playerHand[i] = -1;
+
+                }
+            }
+
+        }
     }
 
     public void opponentTurn(){
@@ -245,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     cardsRemaining--;
                     cardArray[j] = -1;
+                    cardsRemainingTextView.setText(""+Integer.toString(cardsRemaining));
 
                     if(player==1) {
 
