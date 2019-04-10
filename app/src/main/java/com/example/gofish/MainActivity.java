@@ -23,16 +23,10 @@ public class MainActivity extends AppCompatActivity {
     int[] playerHand = new int[10];
     int[] opponentHand = new int[10];
     ImageButton card[] = new ImageButton[10];
-    ImageButton card1;
-    ImageButton card2;
-    ImageButton card3;
-    ImageButton card4;
-    ImageButton card5;
-    ImageButton card6;
-    ImageButton card7;
-    ImageButton card8;
-    ImageButton card9;
-    ImageButton card10;
+
+    int playerPair = 0;
+    int opponentPair = 0;
+    int cardsRemaining = 42;
 
 
     @Override
@@ -78,14 +72,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void shuffleDeck(){
+    public void shuffleDeck() {
         Random rgen = new Random();  // Random number generator
-     //initialize deck from 1-52
-        for(int j = 0; j < cardArray.length; j++) {
-            cardArray[j] = j +1;
+        //initialize deck from 1-52
+        for (int j = 0; j < cardArray.length; j++) {
+            cardArray[j] = j + 1;
         }
         //randomize order of cards
-        for (int i=0; i<cardArray.length; i++) {
+        for (int i = 0; i < cardArray.length; i++) {
             int randomPosition = rgen.nextInt(cardArray.length);
             int temp = cardArray[i];
             cardArray[i] = cardArray[randomPosition];
@@ -138,9 +132,51 @@ public class MainActivity extends AppCompatActivity {
                 Drawable currentCard = Drawable.createFromStream(stream, "empty");
                 card[i].setImageDrawable(currentCard);
             } catch (IOException exception) {
-                Log.e("","Error loading " + "empty", exception);
+                Log.e("", "Error loading " + "empty", exception);
             }
         }
 
+
+    }
+
+    public void goFish(int[] array) {
+        Random rgen = new Random();
+
+        if (cardsRemaining == 0) {
+            if (playerPair > opponentPair) {
+                //print out You Win!
+            } else {
+                //print out you lose :(
+            }
+        } else {
+            for (int j = 0; j < array.length; j++) {
+                if (array[j] == -1) {
+                    while(array[j] == -1) {
+                        array[j] = cardArray[rgen.nextInt(cardArray.length)];
+                    }
+                    cardsRemaining--;
+
+                    // use AssetManager to load next image from assets folder
+                    AssetManager assets = getAssets();
+                    String cards = "cards";
+                    String nextCard = "";
+
+                    nextCard = Integer.toString(array[j]);
+                    // get an InputStream to the asset representing the next flag
+                    // and try to use the InputStream
+                    try (InputStream stream =
+                                 assets.open(cards + "/" + nextCard + ".png")) {
+                        // load the asset as a Drawable and display on the flagImageView
+                        Drawable currentCard = Drawable.createFromStream(stream, nextCard);
+                        card[i].setImageDrawable(currentCard);
+                    } catch (IOException exception) {
+                        Log.e("", "Error loading " + nextCard, exception);
+                    }
+                    j = array.length;
+
+                }
+
+            }
+        }
     }
 }
