@@ -87,41 +87,38 @@ public class MainActivity extends AppCompatActivity {
         //deal even cards to player and odd cards to computer
         int j = 0;
         int k = 0;
-		for (int i=0; i<10; i++) {
-            if(i %2 == 0){
+        for (int i = 0; i < 10; i++) {
+            if (i % 2 == 0) {
                 playerHand[j] = cardArray[i];
                 j++;
-            }
-
-            else{
+            } else {
                 opponentHand[k] = cardArray[i];
                 k++;
             }
         }
         //set bottom row of cards to be -1 so they're invalid
-        for(int i=5; i<10; i++){
+        for (int i = 5; i < 10; i++) {
             playerHand[i] = -1;
             opponentHand[i] = -1;
         }
 
-        for(int i = 0; i<5; i++){
-            card1.setImageResource(R.drawable.1);
-        }
 
         // use AssetManager to load next image from assets folder
         AssetManager assets = getActivity().getAssets();
-
-        // get an InputStream to the asset representing the next flag
-        // and try to use the InputStream
-        try (InputStream stream =
-                     assets.open(region + "/" + nextImage + ".png")) {
-            // load the asset as a Drawable and display on the flagImageView
-            Drawable flag = Drawable.createFromStream(stream, nextImage);
-            flagImageView.setImageDrawable(flag);
-        }
-        catch (IOException exception) {
-            Log.e(TAG, "Error loading " + nextImage, exception);
+        String cards = "cards";
+        String nextCard = "";
+        for (int i = 0; i < 5; i++) {
+            nextCard = Integer.toString(playerHand[i]);
+            // get an InputStream to the asset representing the next flag
+            // and try to use the InputStream
+            try (InputStream stream =
+                         assets.open(cards + "/" + nextCard + ".png")) {
+                // load the asset as a Drawable and display on the flagImageView
+                Drawable currentCard = Drawable.createFromStream(stream, nextCard);
+                card1.setImageDrawable(currentCard);
+            } catch (IOException exception) {
+                //Log.e(TAG, "Error loading " + nextCard, exception);
+            }
         }
     }
-
 }
