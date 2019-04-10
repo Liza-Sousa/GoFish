@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     int playerPair = 0;
     int opponentPair = 0;
     int cardsRemaining = 42;
+    String TAG = "GoFish";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         playerPairTextView = findViewById(R.id.playerPairs) ;
         opponentPairTextView = findViewById(R.id.opponentPairs) ;
-
         cardsRemainingTextView = findViewById(R.id.cardsLeft);
 
         handler = new Handler();
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         card[9] = findViewById(R.id.card10);
         cardWanted = findViewById(R.id.cardWanted);
         for (int i = 0; i<10; i++) {
+            card[i].setClickable(false);
             setOnClick(card[i], i);
         }
         shuffleDeck();
@@ -77,17 +78,20 @@ public class MainActivity extends AppCompatActivity {
                 int getPair = 0;
                 AssetManager assets = getAssets();
                 for(int i = 0; i<10; i++) {
-                    if(opponentHand[i] > 0 && opponentHand[i] % 13 == playerHand[id]) {
+                    if(opponentHand[i] > 0 && playerHand[id] > 0 && opponentHand[i] % 13 == playerHand[id] % 13) {
                         // found a pair
                         Toast.makeText(getApplicationContext(), "You got a pair", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onclick: pos "+ Integer.toString(id) + " card " + Integer.toString(playerHand[id]) + " opponentcard " + Integer.toString(opponentHand[i]));
+
                         try (InputStream stream =
                                      assets.open( "cards/" + "empty" + ".png")) {
                             // load the asset as a Drawable and display on the flagImageView
                             Drawable currentCard = Drawable.createFromStream(stream, "empty");
                             card[id].setImageDrawable(currentCard);
+                            card[id].setClickable(false);
                             playerHand[id] = -1;
                         } catch (IOException exception) {
-                            Log.e("","Error loading " + "empty", exception);
+                            Log.e(TAG,"Error loading " + "empty", exception);
                         }
                         // load the next flag after a 2-second delay
                         playerPair++;
@@ -99,11 +103,13 @@ public class MainActivity extends AppCompatActivity {
                                     public void run() {
                                     }
                                 }, 2000); // 2000 milliseconds for 2-second delay
-
+                        if(isEmpty(1) == 1)
+                            goFish(playerHand, 1);
                     }
                 }
                 if(getPair == 0) {
                     Toast.makeText(getApplicationContext(), "You did not get a match", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onclick: pos "+ Integer.toString(id) + " card " + Integer.toString(playerHand[id]));
                     goFish(playerHand, 1);
                     handler.postDelayed(
                             new Runnable() {
@@ -173,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 5; i < 10; i++) {
             playerHand[i] = -1;
             opponentHand[i] = -1;
+            // card[i].setClickable(false);
         }
 
         // use AssetManager to load next image from assets folder
@@ -188,8 +195,9 @@ public class MainActivity extends AppCompatActivity {
                 // load the asset as a Drawable and display on the flagImageView
                 Drawable currentCard = Drawable.createFromStream(stream, nextCard);
                 card[i].setImageDrawable(currentCard);
+                card[i].setClickable(true);
             } catch (IOException exception) {
-                Log.e("", "Error loading " + nextCard, exception);
+                Log.e(TAG, "Error loading " + nextCard, exception);
             }
         }
         for (int i = 5; i < 10; i++) {
@@ -200,24 +208,28 @@ public class MainActivity extends AppCompatActivity {
                 // load the asset as a Drawable and display on the flagImageView
                 Drawable currentCard = Drawable.createFromStream(stream, "empty");
                 card[i].setImageDrawable(currentCard);
+                card[i].setClickable(false);
             } catch (IOException exception) {
-                Log.e("","Error loading " + "empty", exception);
+                Log.e(TAG,"Error loading " + "empty", exception);
             }
         }
         checkPlayerInitialMatch(playerHand);
-
+        checkOpponentInitialMatch(opponentHand);
 
 
     }
     public int checkPlayerInitialMatch(int[] array){
         int ret = 0;
+        int empty = 0;
         for(int i = 0; i < array.length - 1; i++){
             for(int j = i+1; j<array.length; j++){
-                if (array[i]%13 == array[j]%13 && array[i]!=-1 && array[j]!=-1){
+                if (array[i]!=-1 && array[j]!=-1 && array[i]%13 == array[j]%13){
                     Toast.makeText(getApplicationContext(), "You got a pair", Toast.LENGTH_SHORT).show();
 
                     playerPair++;
                     playerPairTextView.setText(""+Integer.toString(playerPair));
+                    Log.d(TAG, "checkPlayerInitialMatch: card1 " + Integer.toString(playerHand[i]) + " card2 " + Integer.toString(playerHand[j]));
+                    Log.d(TAG, "checkPlayerInitialMatch: pos1 " + Integer.toString(i) + " pos2 " + Integer.toString(j));
 
                     AssetManager assets = getAssets();
                     String cards = "cards";
@@ -227,9 +239,12 @@ public class MainActivity extends AppCompatActivity {
                         // load the asset as a Drawable and display on the flagImageView
                         Drawable currentCard = Drawable.createFromStream(stream, "empty");
                         card[i].setImageDrawable(currentCard);
+                        card[i].setClickable(false);
                         card[j].setImageDrawable(currentCard);
+                        card[j].setClickable(false);
+
                     } catch (IOException exception) {
-                        Log.e("","Error loading " + "empty", exception);
+                        Log.e(TAG,"Error loading " + "empty", exception);
                     }
                     playerHand[j] = -1;
                     playerHand[i] = -1;
@@ -256,6 +271,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Opponent got a pair", Toast.LENGTH_SHORT).show();
                     opponentPair++;
                     opponentPairTextView.setText(""+Integer.toString(opponentPair));
+                    Log.d(TAG, "checkOpponentInitialMatch: card1 " + Integer.toString(opponentHand[i]) + " card2 " + Integer.toString(opponentHand[j]));
+                    Log.d(TAG, "checkOpponentInitialMatch: pos1 " + Integer.toString(i) + " pos2 " + Integer.toString(j));
+
+
                     opponentHand[j] = -1;
                     opponentHand[i] = -1;
                     ret = 1;
@@ -281,12 +300,13 @@ public class MainActivity extends AppCompatActivity {
         while(opponentHand[cardPicked]==-1){
             cardPicked = rgen.nextInt(10);
         }
-
-        int baseValue = cardPicked%13;
+        Log.d(TAG, "opponentTurn: cardPicked " + Integer.toString(cardPicked) );
+        int baseValue = opponentHand[cardPicked]%13;
+        Log.d(TAG, "opponentTurn: baseValue" + Integer.toString(baseValue + 1) );
 
         AssetManager assets = getAssets();
         String cards = "bigNum";
-        String nextCard = Integer.toString(baseValue);
+        String nextCard = Integer.toString(baseValue+1);
 
         // get an InputStream to the asset representing the next flag
         // and try to use the InputStream
@@ -296,22 +316,27 @@ public class MainActivity extends AppCompatActivity {
             Drawable currentCard = Drawable.createFromStream(stream, nextCard);
             cardWanted.setImageDrawable(currentCard);
         } catch (IOException exception) {
-            Log.e("", "Error loading " + nextCard, exception);
+            Log.e(TAG, "Error loading " + nextCard, exception);
         }
         int getPair = 0;
         for(int i = 0; i<10; i++) {
-            if(playerHand[i] > 0 && playerHand[i] % 13 == opponentHand[cardPicked]) {
+            if(playerHand[i] > 0 && opponentHand[cardPicked] > 0  && playerHand[i] % 13 == opponentHand[cardPicked]%13) {
                 // found a pair
                 Toast.makeText(getApplicationContext(), "Opponent got a pair", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "opponentTurn: got a match pairs number" + Integer.toString(opponentPair + 1));
+                Log.d(TAG, "opponentTurn: got a match pos "+ Integer.toString(cardPicked) + " opponentCard " + Integer.toString(opponentHand[cardPicked]) + " playercard " + Integer.toString(playerHand[i]));
+
+
                 try (InputStream stream =
                              assets.open( "cards/" + "empty" + ".png")) {
                     // load the asset as a Drawable and display on the flagImageView
                     Drawable currentCard = Drawable.createFromStream(stream, "empty");
                     card[i].setImageDrawable(currentCard);
+                    card[i].setClickable(false);
                     playerHand[i] = -1;
                     opponentHand[cardPicked] = -1;
                 } catch (IOException exception) {
-                    Log.e("","Error loading " + "empty", exception);
+                    Log.e(TAG,"Error loading " + "empty", exception);
                 }
                 // load the next flag after a 2-second delay
                 opponentPair++;
@@ -323,12 +348,17 @@ public class MainActivity extends AppCompatActivity {
                             public void run() {
                             }
                         }, 2000); // 2000 milliseconds for 2-second delay
+                if(isEmpty(0) == 1)
+                    goFish(opponentHand, 0);
+                if(isEmpty(1) == 1)
+                    goFish(playerHand, 1);
 
             }
         }
         if(getPair == 0) {
             Toast.makeText(getApplicationContext(), "Opponent did not get a match", Toast.LENGTH_SHORT).show();
-            goFish(playerHand, 1);
+            Log.d(TAG, "opponentTurn: no match");
+
             handler.postDelayed(
                     new Runnable() {
                         @Override
@@ -337,7 +367,8 @@ public class MainActivity extends AppCompatActivity {
                     }, 2000); // 2000 milliseconds for 2-second delay
             goFish(opponentHand, 0);
             for(int i = 0; i<10; i++) {
-                card[i].setClickable(true);
+                if(playerHand[i] != -1)
+                    card[i].setClickable(true);
             }
         } else {
             opponentTurn();
@@ -350,19 +381,38 @@ public class MainActivity extends AppCompatActivity {
         if (cardsRemaining == 0) {
             if (playerPair > opponentPair) {
                 //print out You Win!
+                Toast.makeText(getApplicationContext(), "You won! Congratulations!", Toast.LENGTH_SHORT).show();
+                handler.postDelayed(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        }, 5000); // 2000 milliseconds for 2-second delay
+
             } else {
                 //print out you lose :(
+                Toast.makeText(getApplicationContext(), "You lost! Better luck next time.", Toast.LENGTH_SHORT).show();
+                handler.postDelayed(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                            }
+                        }, 5000); // 2000 milliseconds for 2-second delay
             }
         //cards still available to get
         } else {
             for (int j = 0; j < array.length; j++) {
                 //if the random value of the cardArray has already been used, keep trying until a new value is found
+                int ranNum = 0;
                 if (array[j] == -1) {
                     while (array[j] == -1) {
-                        array[j] = cardArray[rgen.nextInt(cardArray.length)];
+                        ranNum = rgen.nextInt(cardArray.length);
+                        array[j] = cardArray[ranNum];
                     }
                     cardsRemaining--;
-                    cardArray[j] = -1;
+                    Log.d(TAG, "picked card " + Integer.toString(cardArray[ranNum]) + " player " + Integer.toString(player));
+
+                    cardArray[ranNum] = -1;
                     cardsRemainingTextView.setText(""+Integer.toString(cardsRemaining));
 
                     if(player==1) {
@@ -380,11 +430,12 @@ public class MainActivity extends AppCompatActivity {
                             // load the asset as a Drawable and display on the flagImageView
                             Drawable currentCard = Drawable.createFromStream(stream, nextCard);
                             card[j].setImageDrawable(currentCard);
+                            card[j].setClickable(true);
                         } catch (IOException exception) {
-                            Log.e("", "Error loading " + nextCard, exception);
+                            Log.e(TAG, "Error loading " + nextCard, exception);
                         }
-                        j = array.length;
                     }
+                    j = array.length;
 
                 }
 
@@ -392,14 +443,35 @@ public class MainActivity extends AppCompatActivity {
             if (player == 1) {
                 if (checkPlayerInitialMatch(playerHand) == 0) {
                     opponentTurn();
+                } else ;{
+                    if(isEmpty(player) == 1)
+                        goFish(playerHand, player);
                 }
             } else {
                 if (checkOpponentInitialMatch(opponentHand) == 1) {
+                    if(isEmpty(player) == 1)
+                        goFish(opponentHand, player);
                     opponentTurn();
                 }
             }
 
         }
+    }
+
+    private int isEmpty(int player) {
+        int isEmpty = 1;
+        if (player == 1) {
+            for(int i = 0; i< 10; i++) {
+                if (playerHand[i] >0)
+                    isEmpty = 0;
+            }
+        } else {
+            for(int i = 0; i< 10; i++) {
+                if (opponentHand[i] >0)
+                    isEmpty = 0;
+            }
+        }
+        return isEmpty;
     }
 }
 
