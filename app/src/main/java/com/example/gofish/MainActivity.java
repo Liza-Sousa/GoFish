@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     int[] playerHand = new int[10];
     int[] opponentHand = new int[10];
     ImageButton card[] = new ImageButton[10];
+    ImageView cardWanted;
 
     int playerPair = 0;
     int opponentPair = 0;
@@ -46,12 +48,14 @@ public class MainActivity extends AppCompatActivity {
         card[7] = findViewById(R.id.card8);
         card[8] = findViewById(R.id.card9);
         card[9] = findViewById(R.id.card10);
+        cardWanted = findViewById(R.id.cardWanted);
         for (int i = 0; i<10; i++) {
             setOnClick(card[i], i);
         }
         shuffleDeck();
         dealCards();
         goFish(playerHand, 1);
+        opponentTurn();
     }
 
     private void setOnClick(final ImageButton btn, final int id){
@@ -166,17 +170,46 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void opponentTurn(){
+        Random rgen = new Random();
+        int cardPicked = rgen.nextInt(10);
+        while(opponentHand[cardPicked]==-1){
+            cardPicked = rgen.nextInt(10);
+        }
+
+        int baseValue = cardPicked%13;
+
+        AssetManager assets = getAssets();
+        String cards = "bigNum";
+        String nextCard = Integer.toString(baseValue);
+
+        // get an InputStream to the asset representing the next flag
+        // and try to use the InputStream
+        try (InputStream stream =
+                     assets.open(cards + "/" + "big" + nextCard + ".jpg")) {
+            // load the asset as a Drawable and display on the flagImageView
+            Drawable currentCard = Drawable.createFromStream(stream, nextCard);
+            cardWanted.setImageDrawable(currentCard);
+        } catch (IOException exception) {
+            Log.e("", "Error loading " + nextCard, exception);
+        }
+
+
+    }
+
     public void goFish(int[] array, int player) {
         Random rgen = new Random();
-
+        //no more cards left to get
         if (cardsRemaining == 0) {
             if (playerPair > opponentPair) {
                 //print out You Win!
             } else {
                 //print out you lose :(
             }
+        //cards still available to get
         } else {
             for (int j = 0; j < array.length; j++) {
+                //if the random value of the cardArray has already been used, keep trying until a new value is found
                 if (array[j] == -1) {
                     while (array[j] == -1) {
                         array[j] = cardArray[rgen.nextInt(cardArray.length)];
