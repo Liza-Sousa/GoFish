@@ -1,6 +1,8 @@
 package com.example.gofish;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View.OnClickListener;
 
 import android.graphics.drawable.Drawable;
@@ -140,7 +142,12 @@ public class GoFishActivity extends AppCompatActivity {
         /*if (id == R.id.action_settings) {
             return true;
         }*/
-
+        switch (item.getItemId()) {
+            case R.id.switchGame:
+                Intent myIntent = new Intent(this, MainActivity.class);
+                startActivity(myIntent);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
