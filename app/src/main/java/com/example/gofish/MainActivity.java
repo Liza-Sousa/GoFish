@@ -62,12 +62,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             //switch to hangman
+            Intent myIntent = new Intent(MainActivity.this, HangManActivity.class);
+            startActivity(myIntent);
+
         }
     };
     OnClickListener tictactoeListen = new OnClickListener() {
         @Override
         public void onClick(View v) {
             //switch to tictac
+            Intent myIntent = new Intent(MainActivity.this, DoodleActivity.class);
+            startActivity(myIntent);
+
         }
     };
 }
