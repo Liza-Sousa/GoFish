@@ -28,7 +28,7 @@
 
     <item
         android:id="@+id/change_game"
-        android:title="@string/change_game"
+        android:title="Switch Game"
         android:icon="@drawable/ic_child_care_black_24dp"
         app:showAsAction="ifRoom">
     </item>
