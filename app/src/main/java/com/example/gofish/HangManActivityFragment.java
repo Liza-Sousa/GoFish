@@ -71,17 +71,17 @@ public class HangManActivityFragment extends Fragment {
          inflater.inflate(R.layout.fragment_hangman, container, false);
 
       fileNameList = new ArrayList<>();
-      wordsList = new ArrayList<>();
+      wordsList = new ArrayList<>(7);
        wordsList.add("hello");
-       /*
        wordsList.add("world");
        wordsList.add("globe");
        wordsList.add("chair");
        wordsList.add("table");
        wordsList.add("light");
        wordsList.add("happy");
-    */
+
        random = new SecureRandom();
+
       handler = new Handler();
       // load the shake animation that's used for incorrect answers
       shakeAnimation = AnimationUtils.loadAnimation(getActivity(),
@@ -133,14 +133,13 @@ public class HangManActivityFragment extends Fragment {
       totalGuesses = 0; // reset the total number of guesses the user made
       wordsList.clear(); // clear prior list of quiz countries
        wordsList.add("hello");
-       /*
        wordsList.add("world");
        wordsList.add("globe");
        wordsList.add("chair");
        wordsList.add("table");
        wordsList.add("light");
        wordsList.add("happy");
-    */
+
        // get an InputStream to the asset representing the next flag
        // and try to use the InputStream
        try (InputStream stream =
@@ -162,7 +161,7 @@ public class HangManActivityFragment extends Fragment {
    private void loadNextWord() {
       // get file name of the next flag and remove it from the list
        Random rand = new Random();
-       int ranNum = rand.nextInt(1);
+       int ranNum = rand.nextInt(7);
       String nextWord = wordsList.get(ranNum);
       correctAnswer = nextWord; // update the correct answer
       letter1.setText("?");// clear answer
@@ -301,7 +300,7 @@ public class HangManActivityFragment extends Fragment {
 
                  animate(false); // animate the flag onto the screen
                  if (hangIndex == 6) {
-                     Toast.makeText(getContext(), "You're dead!", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(getContext(), "You're dead! The word was " + answer, Toast.LENGTH_SHORT).show();
                      // load the next flag after a 2-second delay
                      handler.postDelayed(
                              new Runnable() {
