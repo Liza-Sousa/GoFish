@@ -2,6 +2,7 @@ package com.example.gofish;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View.OnClickListener;
 
 import android.graphics.drawable.Drawable;
@@ -136,15 +137,18 @@ public class GoFishActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Intent preferencesIntent = new Intent(this, MainActivity.class);
-        startActivity(preferencesIntent);
-        return super.onOptionsItemSelected(item);
 
         //noinspection SimplifiableIfStatement
         /*if (id == R.id.action_settings) {
             return true;
         }*/
-
+        switch (item.getItemId()) {
+            case R.id.switchGame:
+                Intent myIntent = new Intent(this, MainActivity.class);
+                startActivity(myIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void shuffleDeck(){
