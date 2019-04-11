@@ -39,6 +39,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
+            android:src="@drawable/gofish_icon"
             tools:srcCompat="@drawable/gofish_icon" />
 
         <ImageButton
@@ -48,6 +49,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
+            android:src="@drawable/hangman_icon"
             tools:srcCompat="@drawable/hangman_icon" />
 
         <ImageButton
@@ -57,6 +59,7 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
+            android:src="@drawable/tictac"
             tools:srcCompat="@drawable/tictac" />
 
     </LinearLayout>
