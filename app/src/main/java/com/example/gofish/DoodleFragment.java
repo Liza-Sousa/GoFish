@@ -1,6 +1,7 @@
 package com.example.gofish;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -174,14 +175,13 @@ public class DoodleFragment extends Fragment {
                 PictureDialogFragment pictureDialog = new PictureDialogFragment();
                 pictureDialog.show(getFragmentManager(), "Picture Dialog");
                 return true;
-            case R.id.change_game:
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.doodleFragment, new HangManActivityFragment(), "Quiz Fragment");
-                ft.commit();
+
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     // requests for the permission needed for saving the image if
 

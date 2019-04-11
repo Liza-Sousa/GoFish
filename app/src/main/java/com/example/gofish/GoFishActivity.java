@@ -63,6 +63,8 @@ public class GoFishActivity extends AppCompatActivity {
         cardWanted = findViewById(R.id.cardWanted);
         for (int i = 0; i<10; i++) {
             card[i].setClickable(false);
+            playerHand[i] = -1;
+            opponentHand[i] = -1;
             setOnClick(card[i], i);
         }
         shuffleDeck();
@@ -147,10 +149,30 @@ public class GoFishActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(this, MainActivity.class);
                 startActivity(myIntent);
                 return true;
+            case R.id.restartGame:
+                restartGame();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void restartGame() {
+        for (int i = 0; i<10; i++) {
+            card[i].setClickable(false);
+            playerHand[i] = -1;
+            opponentHand[i] = -1;
+        }
+        playerPair = 0;
+        playerPairTextView.setText("" + Integer.toString(playerPair));
+        opponentPair = 0;
+        opponentPairTextView.setText("" + Integer.toString(opponentPair));
+
+        cardsRemaining = 42;
+        cardsRemainingTextView.setText("" + Integer.toString(cardsRemaining));
+
+        // empty players' hand
+        shuffleDeck();
+        dealCards();
+    }
     public void shuffleDeck(){
         Random rgen = new Random();  // Random number generator
      //initialize deck from 1-52

@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -26,7 +27,6 @@ public class HangManActivity extends AppCompatActivity{
 
     private boolean phoneDevice = true; // used to force portrait mode
     private boolean preferencesChanged = true; // did preferences change?
-    private Button changeGame; // change the game
 
     // configure the HangManActivity
     @Override
@@ -57,9 +57,6 @@ public class HangManActivity extends AppCompatActivity{
         if (phoneDevice)
             setRequestedOrientation(
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        changeGame = (Button) findViewById(R.id.changeGame);
-        changeGame.setOnClickListener(changGamerButtonListener);
-
 
     }
 
@@ -84,6 +81,7 @@ public class HangManActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         // get the device's current orientation
         int orientation = getResources().getConfiguration().orientation;
+        getMenuInflater().inflate(R.menu.hangman_fragment_menu, menu);
 
         // display the app's menu only in portrait orientation
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -95,6 +93,25 @@ public class HangManActivity extends AppCompatActivity{
             return false;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        /*if (id == R.id.action_settings) {
+            return true;
+        }*/
+        switch (item.getItemId()) {
+            case R.id.change_game_main:
+                Intent myIntent = new Intent(this, MainActivity.class);
+                startActivity(myIntent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     // listener for changes to the app's SharedPreferences
     private OnSharedPreferenceChangeListener preferencesChangeListener =
@@ -115,13 +132,6 @@ public class HangManActivity extends AppCompatActivity{
             };
 
 
-    private View.OnClickListener changGamerButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent myIntent = new Intent(HangManActivity.this, DoodleActivity.class);
-            startActivity(myIntent);
-        }
-    };
 }
 
 
