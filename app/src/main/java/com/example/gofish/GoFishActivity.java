@@ -38,6 +38,7 @@ public class GoFishActivity extends AppCompatActivity {
     int opponentPair = 0;
     int cardsRemaining = 42;
     String TAG = "GoFish";
+    int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,10 @@ public class GoFishActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gofish);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent mIntent = getIntent();
+        score = mIntent.getIntExtra("score", 0);
+        Toast.makeText(getApplicationContext(), "Score is now " + score, Toast.LENGTH_LONG).show();
         playerPairTextView = findViewById(R.id.playerPairs) ;
         opponentPairTextView = findViewById(R.id.opponentPairs) ;
         cardsRemainingTextView = findViewById(R.id.cardsLeft);
@@ -147,6 +152,7 @@ public class GoFishActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.switchGame:
                 Intent myIntent = new Intent(this, MainActivity.class);
+                myIntent.putExtra("score", score);
                 startActivity(myIntent);
                 return true;
             case R.id.restartGame:
@@ -312,6 +318,7 @@ public class GoFishActivity extends AppCompatActivity {
                                 }
                             }, 2000); // 2000 milliseconds for 2-second delay
 
+
                 }
             }
         }
@@ -406,6 +413,8 @@ public class GoFishActivity extends AppCompatActivity {
         Random rgen = new Random();
         //no more cards left to get
         if (cardsRemaining == 0) {
+            score = score + playerPair;
+            Toast.makeText(getApplicationContext(), "Score is now " + score, Toast.LENGTH_SHORT).show();
             if (playerPair > opponentPair) {
                 //print out You Win!
                 Toast.makeText(getApplicationContext(), "You won! Congratulations!", Toast.LENGTH_SHORT).show();
@@ -426,6 +435,7 @@ public class GoFishActivity extends AppCompatActivity {
                             }
                         }, 5000); // 2000 milliseconds for 2-second delay
             }
+            restartGame();
         //cards still available to get
         } else {
             for (int j = 0; j < array.length; j++) {

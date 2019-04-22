@@ -10,5 +10,19 @@
         android:icon="@drawable/ic_child_care_black_24dp"
         app:showAsAction="ifRoom">
     </item>
-
+    <item
+        android:id="@+id/disney"
+        android:orderInCategory="100"
+        android:title="Disney"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/pokemon"
+        android:orderInCategory="100"
+        android:title="Pokemon"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/animals"
+        android:orderInCategory="100"
+        android:title="Animals"
+        app:showAsAction="never" />
 </menu>

@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewAnimationUtils;
@@ -48,6 +50,7 @@ public class HangManActivityFragment extends Fragment {
    private Handler handler; // used to delay loading next images
    private Animation shakeAnimation; // animation for incorrect guess
    private int hangIndex = 0;
+   int score = 0;
 
    private LinearLayout quizLinearLayout; // layout that contains the quiz
    private TextView guessWordTextView; // shows current question #
@@ -121,9 +124,18 @@ public class HangManActivityFragment extends Fragment {
        return view; // return the fragment's view for display
    }
 
+   public int getScore(){
+       return score;
+   }
+
+    public void setScore(int i){
+        score = i;
+
+    }
+
 
    // set up and start the next quiz
-   public void resetQuiz() {
+   public void resetQuiz(String s) {
       // use AssetManager to get image file names for enabled regions
       AssetManager assets = getActivity().getAssets();
       // wordsList.clear(); // empty list of image file names
@@ -132,13 +144,14 @@ public class HangManActivityFragment extends Fragment {
       correctAnswers = 0; // reset the number of correct answers made
       totalGuesses = 0; // reset the total number of guesses the user made
       wordsList.clear(); // clear prior list of quiz countries
-       wordsList.add("hello");
+       createList(s);
+       /*wordsList.add("hello");
        wordsList.add("world");
        wordsList.add("globe");
        wordsList.add("chair");
        wordsList.add("table");
        wordsList.add("light");
-       wordsList.add("happy");
+       wordsList.add("happy");*/
 
        // get an InputStream to the asset representing the next flag
        // and try to use the InputStream
@@ -156,7 +169,48 @@ public class HangManActivityFragment extends Fragment {
 
       loadNextWord(); // start the quiz by loading the first flag
    }
+    public void createList(String s){
+       wordsList.clear();
+       switch(s){
+           case "all":
+               wordsList.add("hello");
+               wordsList.add("world");
+               wordsList.add("globe");
+               wordsList.add("chair");
+               wordsList.add("table");
+               wordsList.add("light");
+               wordsList.add("noooo");
+               break;
+           case "disney":
+               wordsList.add("happy");
+               wordsList.add("ariel");
+               wordsList.add("dumbo");
+               wordsList.add("goofy");
+               wordsList.add("pluto");
+               wordsList.add("daisy");
+               wordsList.add("woody");
+           break;
+           case "pokemon":
+               wordsList.add("eevee");
+               wordsList.add("absol");
+               wordsList.add("gible");
+               wordsList.add("inkay");
+               wordsList.add("pichu");
+               wordsList.add("snivy");
+               wordsList.add("zubat");
+           break;
+           case "animals":
+               wordsList.add("horse");
+               wordsList.add("tiger");
+               wordsList.add("snake");
+               wordsList.add("zebra");
+               wordsList.add("mouse");
+               wordsList.add("panda");
+               wordsList.add("moose");
+               break;
 
+       }
+    }
    // after the user guesses a correct flag, load the next flag
    private void loadNextWord() {
       // get file name of the next flag and remove it from the list
@@ -272,6 +326,8 @@ public class HangManActivityFragment extends Fragment {
 
             // if the user has correctly identified FLAGS_IN_QUIZ flags
             if (correctAnswers == 5) {
+                //score = score + (20 - totalGuesses);
+                score = score+10;
                 Toast.makeText(getContext(), "Winner Winner Chicken Dinner!", Toast.LENGTH_SHORT).show();
                 // load the next flag after a 2-second delay
                 handler.postDelayed(
@@ -282,7 +338,7 @@ public class HangManActivityFragment extends Fragment {
                             }
                         }, 2000); // 2000 milliseconds for 2-second delay
 
-                resetQuiz();
+                resetQuiz("all");
             }
          }
          else { // answer was incorrect
@@ -300,6 +356,7 @@ public class HangManActivityFragment extends Fragment {
 
                  animate(false); // animate the flag onto the screen
                  if (hangIndex == 6) {
+                     score = score + correctAnswers;
                      Toast.makeText(getContext(), "You're dead! The word was " + answer, Toast.LENGTH_SHORT).show();
                      // load the next flag after a 2-second delay
                      handler.postDelayed(
@@ -310,7 +367,7 @@ public class HangManActivityFragment extends Fragment {
                                  }
                              }, 2000); // 2000 milliseconds for 2-second delay
 
-                     resetQuiz();
+                     resetQuiz("all");
                  }
              }
              catch (IOException exception) {
@@ -320,14 +377,15 @@ public class HangManActivityFragment extends Fragment {
          }
       }
    };
-    /*
+
     // displays the fragment's menu items
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.hangman_fragment_menu, menu);
     }
-        */
+    */
+
 }
 
 

@@ -36,6 +36,13 @@ public class HangManActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        HangManActivityFragment quizFragment = (HangManActivityFragment)
+                getSupportFragmentManager().findFragmentById(
+                        R.id.quizFragment);
+
+        Intent mIntent = getIntent();
+        quizFragment.setScore(mIntent.getIntExtra("score", 0));
+
         // set default values in the app's SharedPreferences
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -71,7 +78,7 @@ public class HangManActivity extends AppCompatActivity{
             HangManActivityFragment quizFragment = (HangManActivityFragment)
                     getSupportFragmentManager().findFragmentById(
                             R.id.quizFragment);
-            quizFragment.resetQuiz();
+            quizFragment.resetQuiz("all");
             preferencesChanged = false;
         }
     }
@@ -104,11 +111,25 @@ public class HangManActivity extends AppCompatActivity{
         /*if (id == R.id.action_settings) {
             return true;
         }*/
+        HangManActivityFragment quizFragment = (HangManActivityFragment)
+                getSupportFragmentManager().findFragmentById(
+                        R.id.quizFragment);
         switch (item.getItemId()) {
             case R.id.change_game_main:
                 Intent myIntent = new Intent(this, MainActivity.class);
+                myIntent.putExtra("score", quizFragment.getScore());
                 startActivity(myIntent);
                 return true;
+            case R.id.disney:
+                //set words to Disney
+                quizFragment.resetQuiz("disney");
+                break;
+            case R.id.pokemon:
+                quizFragment.resetQuiz("pokemon");
+                break;
+            case R.id.animals:
+                quizFragment.resetQuiz("animals");
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

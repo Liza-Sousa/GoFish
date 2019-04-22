@@ -10,12 +10,16 @@ import android.view.MenuItem;
 
 public class DoodleActivity extends AppCompatActivity {
     // configures the screen orientation for this app
+    int score = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doodle);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent mIntent = getIntent();
+        score = mIntent.getIntExtra("score", 0);
 
         // determine screen size
         int screenSize =
@@ -37,6 +41,7 @@ public class DoodleActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.change_game:
                 Intent myIntent = new Intent(this, MainActivity.class);
+                myIntent.putExtra("score", score);
                 startActivity(myIntent);
                 return true;
         }
