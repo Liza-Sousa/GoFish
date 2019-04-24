@@ -1,6 +1,9 @@
 package com.example.gofish;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View.OnClickListener;
@@ -39,6 +42,10 @@ public class GoFishActivity extends AppCompatActivity {
     int cardsRemaining = 42;
     String TAG = "GoFish";
     int score = 0;
+    int cardValue;
+    int cardPicked;
+    int count = 10;
+//    AssetManager assets = getAssets();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +90,12 @@ public class GoFishActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int getPair = 0;
+
                 AssetManager assets = getAssets();
                 for(int i = 0; i<10; i++) {
                     if(opponentHand[i] > 0 && playerHand[id] > 0 && opponentHand[i] % 13 == playerHand[id] % 13) {
                         // found a pair
+                        matchMessage();
                         Toast.makeText(getApplicationContext(), "You got a pair", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "onclick: pos "+ Integer.toString(id) + " card " + Integer.toString(playerHand[id]) + " opponentcard " + Integer.toString(opponentHand[i]));
 
@@ -97,6 +106,7 @@ public class GoFishActivity extends AppCompatActivity {
                             card[id].setImageDrawable(currentCard);
                             card[id].setClickable(false);
                             playerHand[id] = -1;
+                            opponentHand[i]=-1;
                         } catch (IOException exception) {
                             Log.e(TAG,"Error loading " + "empty", exception);
                         }
@@ -110,20 +120,34 @@ public class GoFishActivity extends AppCompatActivity {
                                     public void run() {
                                     }
                                 }, 2000); // 2000 milliseconds for 2-second delay
-                        if(isEmpty(1) == 1)
+                        if(isEmpty(1) == 1 && cardsRemaining!=0)
                             goFish(playerHand, 1);
+                        if(isEmpty(1) == 0 && cardsRemaining==0){
+                            score = score + playerPair;
+                            Toast.makeText(getApplicationContext(), "Score is now " + score, Toast.LENGTH_SHORT).show();
+                            if (playerPair > opponentPair) {
+                                //print out You Win!
+                                endMessage("You win! Congratulations! Play Again?");
+                            } else {
+                                //print out you lose :(
+                                endMessage("You lose, but you'll get it next time! PLay Again?");
+                            }
+                        }
                     }
                 }
                 if(getPair == 0) {
-                    Toast.makeText(getApplicationContext(), "You did not get a match", Toast.LENGTH_SHORT).show();
+                    //goFish dialog
+                    goFishMessage();
+                    Toast.makeText(getApplicationContext(), "You did not get a match!!! :(", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onclick: pos "+ Integer.toString(id) + " card " + Integer.toString(playerHand[id]));
-                    goFish(playerHand, 1);
+                    //goFish(playerHand, 1);
                     handler.postDelayed(
                             new Runnable() {
                                 @Override
                                 public void run() {
                                 }
                             }, 2000); // 2000 milliseconds for 2-second delay
+                    //opponentTurn();
 
                 }
             }
@@ -151,9 +175,7 @@ public class GoFishActivity extends AppCompatActivity {
         }*/
         switch (item.getItemId()) {
             case R.id.switchGame:
-                Intent myIntent = new Intent(this, MainActivity.class);
-                myIntent.putExtra("score", score);
-                startActivity(myIntent);
+                switchGame();
                 return true;
             case R.id.restartGame:
                 restartGame();
@@ -185,6 +207,7 @@ public class GoFishActivity extends AppCompatActivity {
         for(int j = 0; j < cardArray.length; j++) {
             cardArray[j] = j +1;
         }
+
         //randomize order of cards
         for (int i=0; i<cardArray.length; i++) {
             int randomPosition = rgen.nextInt(cardArray.length);
@@ -206,6 +229,7 @@ public class GoFishActivity extends AppCompatActivity {
                 opponentHand[k] = cardArray[i];
                 k++;
             }
+            //change total cards here
             cardArray[i] = -1;
         }
         //set bottom row of cards to be -1 so they're invalid
@@ -326,21 +350,54 @@ public class GoFishActivity extends AppCompatActivity {
     }
 
     public void opponentTurn(){
+//        int cardValue = 0;
+        String cardString = "";
+        boolean matchCheck = false;
         for(int i = 0; i<10; i++) {
             card[i].setClickable(false);
         }
+        if(cardsRemaining==0 && isEmpty(0)==1){
+            score = score + playerPair;
+            Toast.makeText(getApplicationContext(), "Score is now " + score, Toast.LENGTH_SHORT).show();
+            if (playerPair > opponentPair) {
+                //print out You Win!
+                endMessage("You win! Congratulations! Play Again?");
+            } else {
+                //print out you lose :(
+                endMessage("You lose, but you'll get it next time! PLay Again?");
+            }
+        }
+
         Random rgen = new Random();
-        int cardPicked = rgen.nextInt(10);
+        cardPicked = rgen.nextInt(10);
         while(opponentHand[cardPicked]==-1){
             cardPicked = rgen.nextInt(10);
+        }
+        cardValue = (opponentHand[cardPicked] % 13);
+        switch(cardValue){
+            case 1:
+                cardString = "A";
+                break;
+            case 11:
+                cardString = "J";
+                break;
+            case 12:
+                cardString= "Q";
+                break;
+            case 0:
+                cardString = "K";
+                break;
+            default:
+                cardString = Integer.toString(cardValue);
+
         }
         Log.d(TAG, "opponentTurn: cardPicked " + Integer.toString(cardPicked) );
         int baseValue = opponentHand[cardPicked]%13;
         Log.d(TAG, "opponentTurn: baseValue" + Integer.toString(baseValue + 1) );
 
-        AssetManager assets = getAssets();
+       AssetManager assets = getAssets();
         String cards = "bigNum";
-        String nextCard = Integer.toString(baseValue+1);
+        String nextCard = Integer.toString(baseValue);
 
         // get an InputStream to the asset representing the next flag
         // and try to use the InputStream
@@ -352,90 +409,103 @@ public class GoFishActivity extends AppCompatActivity {
         } catch (IOException exception) {
             Log.e(TAG, "Error loading " + nextCard, exception);
         }
-        int getPair = 0;
-        for(int i = 0; i<10; i++) {
-            if(playerHand[i] > 0 && opponentHand[cardPicked] > 0  && playerHand[i] % 13 == opponentHand[cardPicked]%13) {
-                // found a pair
-                Toast.makeText(getApplicationContext(), "Opponent got a pair", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "opponentTurn: got a match pairs number" + Integer.toString(opponentPair + 1));
-                Log.d(TAG, "opponentTurn: got a match pos "+ Integer.toString(cardPicked) + " opponentCard " + Integer.toString(opponentHand[cardPicked]) + " playercard " + Integer.toString(playerHand[i]));
+        /////////////////////////////////////
+        // create a new AlertDialog and set its message
+        AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(this);
+        confirmBuilder.setMessage("Do you have a " + cardString);
 
-
-                try (InputStream stream =
-                             assets.open( "cards/" + "empty" + ".png")) {
-                    // load the asset as a Drawable and display on the flagImageView
-                    Drawable currentCard = Drawable.createFromStream(stream, "empty");
-                    card[i].setImageDrawable(currentCard);
-                    card[i].setClickable(false);
-                    playerHand[i] = -1;
-                    opponentHand[cardPicked] = -1;
-                } catch (IOException exception) {
-                    Log.e(TAG,"Error loading " + "empty", exception);
-                }
-                // load the next flag after a 2-second delay
-                opponentPair++;
-                opponentPairTextView.setText(""+Integer.toString(opponentPair));
-                getPair = 1;
-                handler.postDelayed(
-                        new Runnable() {
-                            @Override
-                            public void run() {
+        // configure the negative (CANCEL) Button
+        confirmBuilder.setNegativeButton("Nope, go fish!",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean matchCheck = false;
+                        AssetManager assets = getAssets();
+                        for (int i = 0; i < 10; i++) {
+                            if ((playerHand[i] % 13)  == cardValue) {
+                                // found a pair
+                                matchCheck= true;
+                                Toast.makeText(getApplicationContext(), "Liar! You have that card!", Toast.LENGTH_LONG).show();
+                                setBlankCard(i);
+                                playerHand[i] = -1;
+                                opponentHand[cardPicked] = -1;
+                                opponentPair++;
+                                opponentPairTextView.setText(""+Integer.toString(opponentPair));
+                                if(isEmpty(0) == 1)
+                                    goFish(opponentHand, 0);
+                                if(isEmpty(1) == 1)
+                                    goFish(playerHand, 1);
+                                Toast.makeText(getApplicationContext(), "Opponent got a pair even though you tried to lie about it", Toast.LENGTH_SHORT).show();
+                                if(isEmpty(0)==0 && cardsRemaining!=0)
+                                    opponentTurn();
                             }
-                        }, 2000); // 2000 milliseconds for 2-second delay
-                if(isEmpty(0) == 1)
-                    goFish(opponentHand, 0);
-                if(isEmpty(1) == 1)
-                    goFish(playerHand, 1);
-
-            }
-        }
-        if(getPair == 0) {
-            Toast.makeText(getApplicationContext(), "Opponent did not get a match", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "opponentTurn: no match");
-
-            handler.postDelayed(
-                    new Runnable() {
-                        @Override
-                        public void run() {
                         }
-                    }, 2000); // 2000 milliseconds for 2-second delay
-            goFish(opponentHand, 0);
-            for(int i = 0; i<10; i++) {
-                if(playerHand[i] != -1)
-                    card[i].setClickable(true);
-            }
-        } else {
-            opponentTurn();
-        }
+                        if(matchCheck==false) {
+                            for (int i = 0; i < 10; i++) {
+                                card[i].setClickable(true);
+                            }
+                            goFish(opponentHand, 0);
+                            //return;
+                        }
+
+
+                    }
+                });
+
+        // configure the positive (DELETE) Button
+        confirmBuilder.setPositiveButton("Yes!",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        boolean matchCheck = false;
+                        for (int i = 0; i < 10; i++) {
+                            if ((playerHand[i] % 13)  == cardValue) {
+                                // found a pair
+                                matchCheck = true;
+                                setBlankCard(i);
+                                playerHand[i] = -1;
+                                opponentHand[cardPicked] = -1;
+                                opponentPair++;
+                                opponentPairTextView.setText("" + Integer.toString(opponentPair));
+                                if (isEmpty(0) == 1)
+                                    goFish(opponentHand, 0);
+                                if (isEmpty(1) == 1)
+                                    goFish(playerHand, 1);
+                                Toast.makeText(getApplicationContext(), "Opponent got a pair!!! :(", Toast.LENGTH_LONG).show();
+                                if(isEmpty(0)==0 && cardsRemaining!=0)
+                                    opponentTurn();
+                                // test1 opponentTurn();
+                            }
+                        }
+                        if (matchCheck == false) {
+                            Toast.makeText(getApplicationContext(), "Oops! You actually don't have that card!", Toast.LENGTH_SHORT).show();
+                            for (int i = 0; i < 10; i++) {
+                                card[i].setClickable(true);
+                            }
+                            goFish(opponentHand, 0);
+                            return;
+                        }
+
+                    }
+                }
+        );
+
+        confirmBuilder.create().show(); // display AlertDialog
     }
 
     public void goFish(int[] array, int player) {
         Random rgen = new Random();
+        int cardGoFished = 0;
         //no more cards left to get
         if (cardsRemaining == 0) {
             score = score + playerPair;
             Toast.makeText(getApplicationContext(), "Score is now " + score, Toast.LENGTH_SHORT).show();
             if (playerPair > opponentPair) {
                 //print out You Win!
-                Toast.makeText(getApplicationContext(), "You won! Congratulations!", Toast.LENGTH_SHORT).show();
-                handler.postDelayed(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                            }
-                        }, 5000); // 2000 milliseconds for 2-second delay
-
+                endMessage("You win! Congratulations! Play Again?");
             } else {
                 //print out you lose :(
-                Toast.makeText(getApplicationContext(), "You lost! Better luck next time.", Toast.LENGTH_SHORT).show();
-                handler.postDelayed(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                            }
-                        }, 5000); // 2000 milliseconds for 2-second delay
+                endMessage("You lose, but you'll get it next time! Play Again?");
             }
-            restartGame();
         //cards still available to get
         } else {
             for (int j = 0; j < array.length; j++) {
@@ -443,12 +513,15 @@ public class GoFishActivity extends AppCompatActivity {
                 int ranNum = 0;
                 if (array[j] == -1) {
                     while (array[j] == -1) {
-                        ranNum = rgen.nextInt(cardArray.length);
-                        array[j] = cardArray[ranNum];
+                        //ranNum = rgen.nextInt(cardArray.length);
+                        array[j] = cardArray[count];
+                       count++;
                     }
                     cardsRemaining--;
+                    cardGoFished=array[j];
                     Log.d(TAG, "picked card " + Integer.toString(cardArray[ranNum]) + " player " + Integer.toString(player));
 
+                    //change available cards here
                     cardArray[ranNum] = -1;
                     cardsRemainingTextView.setText(""+Integer.toString(cardsRemaining));
 
@@ -460,6 +533,7 @@ public class GoFishActivity extends AppCompatActivity {
                         String nextCard = "";
 
                         nextCard = Integer.toString(array[j]);
+                        Toast.makeText(getApplicationContext(), "You drew a " + (array[j]%13), Toast.LENGTH_LONG).show();
                         // get an InputStream to the asset representing the next flag
                         // and try to use the InputStream
                         try (InputStream stream =
@@ -480,7 +554,8 @@ public class GoFishActivity extends AppCompatActivity {
             if (player == 1) {
                 if (checkPlayerInitialMatch(playerHand) == 0) {
                     opponentTurn();
-                } else ;{
+                } else {
+                    Toast.makeText(getApplicationContext(), "You got a pair of  " + cardGoFished%13 , Toast.LENGTH_SHORT).show();
                     if(isEmpty(player) == 1)
                         goFish(playerHand, player);
                 }
@@ -509,6 +584,68 @@ public class GoFishActivity extends AppCompatActivity {
             }
         }
         return isEmpty;
+    }
+
+    private void setBlankCard(int i){
+       AssetManager assets = getAssets();
+        try (InputStream stream =
+                     assets.open( "cards/" + "empty" + ".png")) {
+            // load the asset as a Drawable and display on the flagImageView
+            Drawable currentCard = Drawable.createFromStream(stream, "empty");
+            card[i].setImageDrawable(currentCard);
+            card[i].setClickable(false);
+        } catch (IOException exception) {
+            Log.e(TAG,"Error loading " + "empty", exception);
+        }
+    }
+    private void goFishMessage(){
+        Toast.makeText(getApplicationContext(), "Entered message function", Toast.LENGTH_LONG).show();
+        AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(this);
+        confirmBuilder.setMessage("Go Fish!");
+        // configure the negative (CANCEL) Button
+        confirmBuilder.setNegativeButton("okay :(",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        goFish(playerHand, 1);
+                    }
+                });
+        confirmBuilder.create().show(); // display AlertDialog
+    }
+
+    private void matchMessage(){
+        AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(this);
+        confirmBuilder.setMessage("You got a match! Go again!");
+        // configure the negative (CANCEL) Button
+        confirmBuilder.setNegativeButton("hooray :)", null);
+        confirmBuilder.create().show(); // display AlertDialog
+    }
+
+    private void endMessage(String s){
+        AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(this);
+        confirmBuilder.setMessage(s);
+        // configure the negative (CANCEL) Button
+        confirmBuilder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //switch back to main
+                        switchGame();
+                    }
+                });
+
+        // configure the positive (DELETE) Button
+        confirmBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        restartGame();
+                    }
+                });
+        confirmBuilder.create().show(); // display AlertDialog
+    }
+
+    private void switchGame(){
+        Intent myIntent = new Intent(this, MainActivity.class);
+        myIntent.putExtra("score", score);
+        startActivity(myIntent);
     }
 }
 

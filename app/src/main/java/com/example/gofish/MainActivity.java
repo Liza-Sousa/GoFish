@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     TextView goFishLabel;
     TextView hangmanLabel;
     TextView tictactoeLabel;
+    TextView scoreValue;
     int hangmanScore = 15;
     int tictacScore = 30;
 
@@ -33,8 +34,29 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn’t resize when the system bars hide and show.
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
         Intent mIntent = getIntent();
         score = mIntent.getIntExtra("score", 0);
+
+        if(score!=0) {
+            scoreValue = findViewById(R.id.scoreValue);
+            String s = Integer.toString(score);
+            scoreValue.setText(s);
+        }
+
+
+
 
 
         Toast.makeText(getApplicationContext(), "Score is now " + score, Toast.LENGTH_SHORT).show();

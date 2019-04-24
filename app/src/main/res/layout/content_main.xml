@@ -5,24 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_columnSpan="2"
+    android:background="@color/design_default_color_primary"
     android:columnCount="2"
+    android:rowCount="5"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
 
     <TextView
         android:id="@+id/welcomeText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_columnSpan="2"
+        android:width="250dp"
         android:text="Welcome to Ultimate "
+        android:textColor="@android:color/background_light"
         android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/scoreLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:text="Score:"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/scoreValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="1"
+        android:text="0"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp" />
 
     <LinearLayout
         android:id="@+id/row1"
         android:layout_width="395dp"
         android:layout_height="675dp"
-        android:layout_row="1"
+        android:layout_row="2"
         android:layout_rowSpan="3"
         android:layout_column="1"
         android:orientation="vertical"
@@ -68,7 +92,7 @@
         android:id="@+id/row2"
         android:layout_width="161dp"
         android:layout_height="680dp"
-        android:layout_row="1"
+        android:layout_row="2"
         android:layout_column="0"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -85,6 +109,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:text="Go Fish!"
+            android:textColor="@android:color/background_light"
             android:textSize="30sp"
             tools:srcCompat="@drawable/gofish_icon" />
 
@@ -97,6 +122,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:text="Hangman!"
+            android:textColor="@android:color/background_light"
             android:textSize="30sp"
             tools:srcCompat="@drawable/hangman_icon" />
 
@@ -108,6 +134,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:text="Tic Tac Toe!"
+            android:textColor="@android:color/background_light"
             android:textSize="30sp"
             tools:srcCompat="@drawable/tictac" />
 
