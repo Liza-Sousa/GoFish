@@ -1,4 +1,4 @@
-package com.example.gofish;
+package com.example.Ultimate;
 
 import org.junit.Test;
 
