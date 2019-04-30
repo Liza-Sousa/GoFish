@@ -1,4 +1,4 @@
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 import org.junit.Test;
 

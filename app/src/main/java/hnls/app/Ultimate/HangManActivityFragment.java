@@ -1,6 +1,6 @@
 // HangManActivityFragment.java
 // Contains the Flag Quiz logic
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -11,8 +11,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewAnimationUtils;
@@ -25,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import hnls.app.Ultimate.R;
 
 import java.io.IOException;
 import java.io.InputStream;

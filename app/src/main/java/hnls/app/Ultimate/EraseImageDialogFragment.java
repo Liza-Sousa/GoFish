@@ -1,6 +1,6 @@
 // EraseImageDialogFragment.java
 // Allows user to erase image
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,6 +8,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+
+import hnls.app.Ultimate.R;
 
 // class for the Erase Image dialog
 public class EraseImageDialogFragment extends DialogFragment {

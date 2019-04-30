@@ -1,4 +1,4 @@
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import hnls.app.Ultimate.R;
+
 public class MainActivity extends AppCompatActivity {
     ImageButton goFishButton;
     ImageButton hangmanButton;
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     int tictacScore = 30;
 
     String TAG = "main";
-    int score = 0;
+    int score = 30;
     private boolean phoneDevice = true; // used to force portrait mode
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         Intent mIntent = getIntent();
-        score = mIntent.getIntExtra("score", 0);
+        score = mIntent.getIntExtra("score", 30);
 
         if(score!=0) {
             scoreValue = findViewById(R.id.scoreValue);

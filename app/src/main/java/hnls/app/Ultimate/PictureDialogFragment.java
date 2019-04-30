@@ -1,4 +1,4 @@
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 
 import android.app.Activity;
@@ -16,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import hnls.app.Ultimate.R;
 
 import java.io.IOException;
 import java.io.InputStream;

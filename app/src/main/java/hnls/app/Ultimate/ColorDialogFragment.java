@@ -1,4 +1,4 @@
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +10,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+
+import hnls.app.Ultimate.R;
 
 // class for the Select Color dialog
 public class ColorDialogFragment extends DialogFragment {

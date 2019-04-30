@@ -1,4 +1,4 @@
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.gofish", appContext.getPackageName());
+        assertEquals("hnls.app.Ultimate", appContext.getPackageName());
     }
 }

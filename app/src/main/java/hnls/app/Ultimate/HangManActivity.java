@@ -1,7 +1,7 @@
 // HangManActivity.java
 // Hosts the HangManActivityFragment on a phone and both the
 // HangManActivityFragment and SettingsActivityFragment on a tablet
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,8 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
+
+import hnls.app.Ultimate.R;
 
 
 public class HangManActivity extends AppCompatActivity{
@@ -39,6 +40,18 @@ public class HangManActivity extends AppCompatActivity{
         HangManActivityFragment quizFragment = (HangManActivityFragment)
                 getSupportFragmentManager().findFragmentById(
                         R.id.quizFragment);
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn’t resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         Intent mIntent = getIntent();
         quizFragment.setScore(mIntent.getIntExtra("score", 0));

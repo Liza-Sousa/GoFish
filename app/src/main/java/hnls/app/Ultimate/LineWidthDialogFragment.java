@@ -1,6 +1,6 @@
 // LineWidthDialogFragment.java
 // Allows user to set the drawing color on the DoodleView
-package com.example.gofish;
+package hnls.app.Ultimate;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+
+import hnls.app.Ultimate.R;
 
 // class for the Select Line Width dialog
 public class LineWidthDialogFragment extends DialogFragment {
