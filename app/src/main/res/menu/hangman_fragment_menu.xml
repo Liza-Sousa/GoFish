@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="hnls.app.Ultimate.HangManActivity">
-
     <item
         android:id="@+id/change_game_main"
         android:title="@string/change_game"
